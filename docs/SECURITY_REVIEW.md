@@ -17,15 +17,22 @@ on the strength of it.
 | Activity | Result |
 | --- | --- |
 | Source verification | All 8 deployed contracts `exact_match` on Sourcify for chain 10143 |
-| Static analysis | `forge lint`: 2 warnings, both `block-timestamp`, both triaged below |
+| Static analysis | `forge lint`: 2 warnings. `slither` 0.11.x: 13 findings, none High or Medium |
 | Unit tests | 19 passing across `Suture.t.sol` and `PolicyActivationScheduler.t.sol` |
 | Invariant tests | 5 invariants, 256 runs each, 128,000 calls per invariant, 0 failures |
 | Live exercise | Deployment, policy activation, deposit with lineage, and a remediation opened by the executor, all on Monad testnet |
 
-`slither` and `mythril` were not available in this environment, so no symbolic
-execution or dataflow analysis was performed. That is a real gap: the classes of
-bug those tools find best (reentrancy paths, unchecked external calls, storage
-collisions) have not been systematically searched for.
+`slither` was installed and run: 13 findings, none High or Medium — 8
+`reentrancy-events`, 2 `reentrancy-benign`, 2 `timestamp`, 1
+`missing-inheritance`. The reentrancy findings are event emissions and benign
+state writes after external calls in `BoundVault.deposit` and
+`MockCreditMarket.collateralize`; no state that governs authorisation is written
+after an external call. `missing-inheritance` notes `PolicyManifestRegistry`
+does not declare the `IPolicyActivation` interface the scheduler defines, which
+is cosmetic.
+
+`mythril` was not available, so no symbolic execution was performed. Storage
+collision and deep path analysis remain unsearched.
 
 ## Invariants proven
 
@@ -47,13 +54,20 @@ calls so authority bugs surface rather than being skipped:
 
 ## Findings
 
-### 1. Executor key concentration — HIGH, unresolved
+### 1. Executor key concentration — HIGH, RESOLVED 2026-08-09
 
-`MONAD_EXECUTOR_KEY` is the deploy key, which is simultaneously issuer, policy
-authority, remediation approver, and now the live executor's signer. Compromise
-of that single key compromises every authority boundary the design defines.
-Acceptable for a testnet demonstration; unacceptable for production, which needs
-separated roles, spend limits, and rotation.
+Previously the executor signed with the deploy key, which was simultaneously
+issuer, policy authority and approver. A dedicated executor key
+(`0x96F0B49a557Cd3dE2f2Da419e2b48152a6cC5379`) now holds `policyAuthority` on a
+redeployed escrow (`0x9E680FD3e2743Ff0691D27FbEA7A3Bf418fa4765`); the human
+deploy key retains `approver`. Both roles are `immutable`, so separation
+required redeployment rather than a setter.
+
+Proven on chain: the executor opened and released, and approval reverted to the
+separate human key. The executor cannot approve its own remediation.
+
+Residual: the executor key still signs unattended with no spend limit or
+rotation policy, and the deploy key remains issuer and approver.
 
 ### 2. `PolicyActivationScheduler` holds policy authority — MEDIUM, by design
 
@@ -78,16 +92,21 @@ untested, as is a real credential oracle. `BoundVault.release` does check
 balance deltas rather than trusting return values, which is the right instinct,
 but it has not been exercised against a hostile token.
 
-### 5. Release path unexercised on chain — INFORMATIONAL
+### 5. Release path — RESOLVED 2026-08-09
 
-The live run opened a remediation. Funding must originate from the source wallet
-by design, so `release` has been exercised only in Foundry tests, never on a
-real chain.
+The full cycle now runs on chain with separated roles: executor opens, human
+approves, source wallet funds through the vault, executor releases. 100e18 moved
+to the replacement wallet and the remediation reached status Executed. See
+`contracts/script/exercise-remediation.sh`.
+
+The escrow binds a remediation to a specific receipt (`positionId ==
+receiptPositionId`); a first attempt with a synthetic position id correctly
+reverted `InvalidRemediation`.
 
 ## What would move this materially
 
 1. An independent audit. Nothing here replaces it.
-2. `slither` and a symbolic execution pass.
+2. A symbolic execution pass (`mythril`); `slither` is now covered.
 3. Fork tests against a real ERC-20 and a hostile token.
-4. Splitting the executor key into scoped roles with limits.
-5. Exercising the full fund-and-release cycle on chain.
+4. Spend limits and rotation for the executor key; splitting issuer from approver.
+5. Splitting the remaining deploy-key roles (issuer, approver, vault authority).

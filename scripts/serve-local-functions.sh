@@ -39,9 +39,10 @@ trap 'rm -f "$ENV_FILE"' EXIT INT TERM
   # to a simulation, so it is safe to run without them.
   echo "MONAD_RPC_URL=${MONAD_RPC_URL:-https://testnet-rpc.monad.xyz}"
   echo "MONAD_CHAIN_ID=${MONAD_CHAIN_ID:-10143}"
-  echo "MONAD_ESCROW_ADDRESS=${MONAD_ESCROW_ADDRESS:-0x1a5dbdff02bd4a1faead7482a131755f1e4d8949}"
+  echo "MONAD_ESCROW_ADDRESS=${MONAD_ESCROW_ADDRESS:-0x9e680fd3e2743ff0691d27fbea7a3bf418fa4765}"
+  echo "MONAD_POLICY_REGISTRY=${MONAD_POLICY_REGISTRY:-0x586c5f4c0d64597c7ffcf5841521e6f0045935d2}"
   echo "MONAD_ASSET_ADDRESS=${MONAD_ASSET_ADDRESS:-0x2d22e91d030143a96cf06de2e53520606f8c60f6}"
-  EXEC_KEY="$(security find-generic-password -a "$KEYCHAIN_ACCOUNT" -s "suture.monad.testnet.deploy-key" -w 2>/dev/null || true)"
+  EXEC_KEY="$(security find-generic-password -a "$KEYCHAIN_ACCOUNT" -s "suture.monad.testnet.executor-key" -w 2>/dev/null || true)"
   [ -n "$EXEC_KEY" ] && echo "MONAD_EXECUTOR_KEY=$EXEC_KEY"
 } >"$ENV_FILE"
 

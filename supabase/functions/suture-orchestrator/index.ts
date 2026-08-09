@@ -19,7 +19,7 @@ const corsHeaders = {
 };
 
 type RequestBody = {
-  operation?: "preflight" | "analyze_lineage";
+  operation?: "preflight" | "analyze_lineage" | "chain_status";
   organizationId?: string;
   walletId?: string;
   sourceAssetId?: string;
@@ -399,6 +399,70 @@ async function preflight(
   }
 }
 
+
+/**
+ * Reads chain state directly over JSON-RPC. No indexer is involved, so the
+ * block number recorded is an observation checkpoint, not a synced cursor.
+ */
+async function readChain(rpcUrl: string, expectedChainId: number, registry: string, asset: string) {
+  const call = async (method: string, params: unknown[]) => {
+    const response = await fetch(rpcUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+    });
+    if (!response.ok) throw new Error(`RPC ${method} failed with HTTP ${response.status}`);
+    const payload = await response.json();
+    if (payload.error) throw new Error(`RPC ${method}: ${payload.error.message ?? "error"}`);
+    return payload.result as string;
+  };
+
+  const reportedChainId = Number(await call("eth_chainId", []));
+  if (reportedChainId !== expectedChainId) {
+    throw new Error(`chain id mismatch: expected ${expectedChainId}, RPC reported ${reportedChainId}`);
+  }
+  const blockNumber = Number(await call("eth_blockNumber", []));
+
+  // activePolicy(address) -> (bytes32,bytes32,uint64,uint64,uint8,bool)
+  // cast sig "activePolicy(address)"
+  const selector = "0x237a06fb";
+  const encoded = `${selector}${asset.replace(/^0x/, "").toLowerCase().padStart(64, "0")}`;
+  const raw = await call("eth_call", [{ to: registry, data: encoded }, "latest"]);
+  const words = (raw.replace(/^0x/, "").match(/.{1,64}/g) ?? []);
+  if (words.length < 6) throw new Error("activePolicy returned an unexpected shape");
+  return {
+    chainId: reportedChainId,
+    blockNumber,
+    registry,
+    asset,
+    policyHash: `0x${words[0]}`,
+    policyVersion: Number.parseInt(words[2] ?? "0", 16),
+    effectiveAt: Number.parseInt(words[3] ?? "0", 16),
+    active: Number.parseInt(words[5] ?? "0", 16) === 1,
+    observedAt: new Date().toISOString(),
+  };
+}
+
+async function upsertChainDiagnostic(
+  service: ReturnType<typeof createClient>,
+  organizationId: string,
+  state: "connected" | "unavailable",
+  detail: string,
+  checkpoint: number | null,
+) {
+  await service.from("integration_connections").upsert({
+    organization_id: organizationId,
+    provider: "Monad testnet",
+    kind: "chain",
+    mode: state === "connected" ? "connected" : "degraded",
+    status: state,
+    diagnostic_state: state,
+    endpoint_label: detail,
+    last_checked_at: new Date().toISOString(),
+    config: { checkpoint_block: checkpoint, source: "direct_rpc_read", indexer: null },
+  }, { onConflict: "organization_id,provider" });
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (request.method !== "POST") return json({ error: "method not allowed" }, 405);
@@ -429,6 +493,33 @@ Deno.serve(async (request) => {
     .eq("user_id", userData.user.id)
     .maybeSingle();
   if (membershipError || !membership) return json({ error: "organization access denied" }, 403);
+
+  if (body.operation === "chain_status") {
+    if (!service) return json({ state: "unavailable", detail: "Server persistence role unavailable." }, 503);
+    const rpcUrl = Deno.env.get("MONAD_RPC_URL");
+    const chainId = Number(Deno.env.get("MONAD_CHAIN_ID") ?? "");
+    const registry = Deno.env.get("MONAD_POLICY_REGISTRY");
+    const asset = Deno.env.get("MONAD_ASSET_ADDRESS");
+    if (!rpcUrl || !Number.isFinite(chainId) || chainId <= 0 || !registry || !asset) {
+      await upsertChainDiagnostic(service, body.organizationId, "unavailable", "No verified chain configuration is present.", null);
+      return json({ state: "unavailable", detail: "Chain configuration is absent. No RPC request was made." }, 503);
+    }
+    try {
+      const observed = await readChain(rpcUrl, chainId, registry, asset);
+      await upsertChainDiagnostic(
+        service,
+        body.organizationId,
+        "connected",
+        `chain ${chainId} · block ${observed.blockNumber} · policy v${observed.policyVersion}`,
+        observed.blockNumber,
+      );
+      return json({ state: "connected", ...observed });
+    } catch (cause) {
+      const detail = cause instanceof Error ? cause.message.slice(0, 200) : "Chain read failed.";
+      await upsertChainDiagnostic(service, body.organizationId, "unavailable", detail, null);
+      return json({ state: "unavailable", detail }, 503);
+    }
+  }
 
   if (body.operation === "preflight") {
     if (!["owner", "issuer_admin", "compliance_operator", "protocol_integrator"].includes(membership.role as string)) {

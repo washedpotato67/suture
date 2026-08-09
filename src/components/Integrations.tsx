@@ -24,8 +24,9 @@ export function Integrations({ integrations }: { integrations: IntegrationStatus
         ))}
       </div>
       <div className="demo-callout">
-        TRUTHFULNESS — simulated adapters are deterministic and local. No Cleanverse request, Monad RPC
-        request, contract deployment, or on-chain transaction has been executed from this console.
+        {integrations.some((integration) => integration.state === "connected")
+          ? "TRUTHFULNESS — a connected provider above reflects a real request made from the server boundary, with the request reference and response digest retained server-side. Any provider still marked simulated or unavailable produced no request at all."
+          : "TRUTHFULNESS — simulated adapters are deterministic and local. No Cleanverse request, Monad RPC request, contract deployment, or on-chain transaction has been executed from this console."}
       </div>
     </section>
   );

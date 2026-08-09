@@ -138,7 +138,13 @@ export function Overview({
               </div>
             ))}
           </div>
-          {isDemo && <div className="demo-callout">DEMO DATA — no Cleanverse or Monad request was executed.</div>}
+          {isDemo && (
+            <div className="demo-callout">
+              {checks.some((check) => check.evidenceState === "verified")
+                ? "DEMO SCENARIO — positions and the incident are seeded, but at least one check above carries provider-verified evidence."
+                : "DEMO DATA — no Cleanverse or Monad request produced these results."}
+            </div>
+          )}
         </article>
       </section>
 
