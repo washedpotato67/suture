@@ -1,0 +1,36 @@
+{
+  "title": "Choose the visual world for SUTURE — roll 3",
+  "question": "The new roll assigned the Live Service Map. Keep it, take the alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "The Live Service Map",
+      "kicker": "ASSIGNED DIRECTION",
+      "lineage": "metro maps & live transit status systems",
+      "thesis": "Lineage as a transit network: positions are stations, the policy thread is the line, revocation suspends service, remediation is the shuttle.",
+      "palette": ["#0d1420", "#3d7dd8", "#ffb340", "#3fae6a"],
+      "materials": ["backlit map glass", "signal tape", "service advisories"],
+      "viewport": "A backlit service map with pulses moving along the policy line, suspension tape across the cut section, and an advisory strip below.",
+      "risk": "Reads playful if the transit metaphor decorates instead of carrying state; every map device must mean something.",
+      "sketch": ".impeccable/sketches/assigned.svg"
+    },
+    {
+      "id": "challenger-flap",
+      "label": "Split-Flap Board",
+      "lineage": "rail concourse departure boards",
+      "thesis": "The console as a clacking incident board: every status change cascades down the flaps.",
+      "case": "Fuses cleanly for events and statuses; the lineage graph has no native form.",
+      "sketch": ".impeccable/sketches/challenger-flap.svg",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-split-flap-concourse-hero.webp"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "The dark institutional dashboard, executed impeccably.",
+    "viewport": "Sidebar, KPI cards, neutral table — the arrangement a reviewer expects, at full craft.",
+    "sketch": ".impeccable/sketches/canon.svg"
+  }
+}

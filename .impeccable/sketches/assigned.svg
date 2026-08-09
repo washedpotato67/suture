@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="monospace">
+  <rect width="1200" height="750" fill="#0d1420"/>
+  <!-- faint grid -->
+  <g stroke="#16202f" stroke-width="1">
+    <line x1="0" y1="150" x2="1200" y2="150"/><line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="450" x2="1200" y2="450"/><line x1="0" y1="600" x2="1200" y2="600"/>
+    <line x1="300" y1="0" x2="300" y2="750"/><line x1="600" y1="0" x2="600" y2="750"/><line x1="900" y1="0" x2="900" y2="750"/>
+  </g>
+  <text x="48" y="60" font-size="17" letter-spacing="3" fill="#e8ecf2">NSPC LINE — LIVE SERVICE MAP</text>
+  <text x="48" y="82" font-size="10" fill="#7c8aa0">POLICY THREAD NSPC-4.2 · EVIDENCE ASSERTED · DEMO DATA</text>
+
+  <!-- main line: asset -> receipt -> collateral -> debt -->
+  <path d="M120 420 L 420 420 L 560 280 L 760 280" fill="none" stroke="#3d7dd8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M560 280 L 640 352 L 760 352" fill="none" stroke="#3d7dd8" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  <!-- suspended section tape -->
+  <g>
+    <line x1="420" y1="420" x2="560" y2="280" stroke="#0d1420" stroke-width="11" stroke-dasharray="14 10"/>
+    <text x="432" y="330" font-size="11" fill="#ffb340" transform="rotate(-43 470 350)">SERVICE SUSPENDED — CVI REVOKED</text>
+  </g>
+  <!-- stations -->
+  <g stroke-width="5" fill="#0d1420">
+    <circle cx="120" cy="420" r="14" stroke="#3d7dd8"/>
+    <circle cx="420" cy="420" r="14" stroke="#3d7dd8"/>
+    <circle cx="760" cy="280" r="14" stroke="#ffb340"/>
+    <circle cx="760" cy="352" r="14" stroke="#ffb340"/>
+  </g>
+  <!-- moving pulses -->
+  <circle cx="240" cy="420" r="5" fill="#9cc2f0"/>
+  <circle cx="330" cy="420" r="5" fill="#9cc2f0" opacity="0.6"/>
+  <!-- interchange ring at source (revocation) -->
+  <circle cx="120" cy="420" r="22" fill="none" stroke="#ff5f52" stroke-width="3" stroke-dasharray="5 5"/>
+  <!-- shuttle line to replacement wallet -->
+  <path d="M120 420 L 120 560 L 470 560" fill="none" stroke="#3fae6a" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 12"/>
+  <circle cx="470" cy="560" r="14" fill="#0d1420" stroke="#3fae6a" stroke-width="5"/>
+  <text x="492" y="566" font-size="12" fill="#3fae6a">REPLACEMENT WALLET — SHUTTLE AWAITS ISSUER APPROVAL</text>
+
+  <!-- station labels -->
+  <g font-size="12" fill="#e8ecf2">
+    <text x="80" y="462">SOURCE ASSET</text>
+    <text x="80" y="478" font-size="10" fill="#7c8aa0">NSPC 2028 · $1,250,000</text>
+    <text x="380" y="462">VAULT RECEIPT</text>
+    <text x="380" y="478" font-size="10" fill="#7c8aa0">bvNSPC · $1,250,000</text>
+    <text x="784" y="286">COLLATERAL · $850,000</text>
+    <text x="784" y="358">DEBT · $612,000</text>
+  </g>
+  <g font-size="10">
+    <text x="80" y="398" fill="#ff5f52">● CREDENTIAL REVOKED</text>
+    <text x="784" y="302" fill="#ffb340">● BLOCKED</text>
+    <text x="784" y="374" fill="#ffb340">● BLOCKED</text>
+  </g>
+
+  <!-- advisory strip -->
+  <rect x="0" y="640" width="1200" height="110" fill="#111b2a"/>
+  <line x1="0" y1="640" x2="1200" y2="640" stroke="#23364f" stroke-width="2"/>
+  <text x="48" y="678" font-size="12" fill="#ffb340">⚠ SERVICE ADVISORY — NSPC LINE</text>
+  <text x="48" y="702" font-size="12" fill="#c7d2e0">Service suspended between VAULT RECEIPT and all downstream stations following a credential revocation.</text>
+  <text x="48" y="724" font-size="12" fill="#c7d2e0">Blast radius: 4 stations · Σ $3,962,000. Shuttle service to REPLACEMENT WALLET departs on issuer approval. Receipt issued on arrival.</text>
+</svg>

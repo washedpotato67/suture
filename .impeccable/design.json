@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-30T00:00:00.000Z",
+  "title": "Design System: SUTURE",
+  "extensions": {
+    "colorMeta": {
+      "delay-amber": {
+        "role": "primary",
+        "displayName": "Delay Amber",
+        "canonical": "#ffb400",
+        "tonalRamp": ["#241a02", "#4a3404", "#6f4d06", "#946708", "#b8800a", "#dd9a0d", "#ffb400", "#ffc233"]
+      },
+      "cancelled-red": {
+        "role": "accent",
+        "displayName": "Cancelled Red",
+        "canonical": "#d32f2f",
+        "tonalRamp": ["#1e0505", "#3d0a0a", "#5c0f0f", "#7b1414", "#9a1919", "#b92424", "#d32f2f", "#e05555"]
+      },
+      "platform-green": {
+        "role": "accent",
+        "displayName": "Platform Green",
+        "canonical": "#3fae6a",
+        "tonalRamp": ["#07160d", "#0e2c1a", "#154327", "#1d5934", "#267041", "#2f8f56", "#3fae6a", "#5fc485"]
+      },
+      "flap-black": {
+        "role": "neutral",
+        "displayName": "Flap Black",
+        "canonical": "#0d0d0f",
+        "tonalRamp": ["#0a0a0c", "#0d0d0f", "#141416", "#1b1b1e", "#232326", "#3a3a3f", "#62626a", "#8b8b92"]
+      },
+      "flap-white": {
+        "role": "neutral",
+        "displayName": "Flap White",
+        "canonical": "#f2f2f2",
+        "tonalRamp": ["#8b8b92", "#a5a5ab", "#bdbdc2", "#d0d0d4", "#dedee1", "#e9e9eb", "#f2f2f2", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "flap": { "displayName": "Flap Face", "purpose": "Everything the board posts: nav, headings, statuses, buttons. Always uppercase, letter-spaced." },
+      "body": { "displayName": "Body", "purpose": "The few sentences of long-form explanatory copy." },
+      "data": { "displayName": "Data Mono", "purpose": "Wallet addresses, hashes, amounts, timestamps, reason codes." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "flap-cascade", "value": "flap-in .16s steps(2, end) both, 38ms per-character stagger", "purpose": "The signature event: a posted value flips in character by character when the record changes. Never on a loop." },
+      { "name": "nav-slide", "value": "transform .2s ease", "purpose": "Mobile concourse column slides in and out." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "1050px" },
+      { "name": "mobile", "value": "760px" },
+      { "name": "narrow", "value": "480px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Flap Text",
+      "kind": "custom",
+      "description": "The signature posted readout: each character sits in its own hinged cell and the row cascades in sequence when the value changes.",
+      "html": "<span class=\"ds-flap-text\" aria-label=\"$3.96M\"><span class=\"ds-flap-char\" style=\"animation-delay:0ms\">$</span><span class=\"ds-flap-char\" style=\"animation-delay:38ms\">3</span><span class=\"ds-flap-char\" style=\"animation-delay:76ms\">.</span><span class=\"ds-flap-char\" style=\"animation-delay:114ms\">9</span><span class=\"ds-flap-char\" style=\"animation-delay:152ms\">6</span><span class=\"ds-flap-char\" style=\"animation-delay:190ms\">M</span></span>",
+      "css": ".ds-flap-text { display: inline-flex; flex-wrap: nowrap; align-items: baseline; white-space: nowrap; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: .06em; color: var(--flap-white, #f2f2f2); } .ds-flap-char { flex: 0 0 auto; display: inline-block; min-width: .62em; padding: 1px 1.5px; text-align: center; background: var(--flap-shadow, #1b1b1e); background-image: linear-gradient(to bottom, transparent calc(50% - .5px), rgba(0,0,0,.55) calc(50% - .5px), rgba(0,0,0,.55) calc(50% + .5px), transparent calc(50% + .5px)); box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); border-radius: 1px; animation: ds-flap-in .16s steps(2, end) both; transform-origin: top; } @keyframes ds-flap-in { 0% { transform: rotateX(88deg); opacity: .25; } 100% { transform: rotateX(0); opacity: 1; } } @media (prefers-reduced-motion: reduce) { .ds-flap-char { animation: none; } }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Delay-amber plate reserved for consequential actions that change recorded state — request, approve, execute.",
+      "html": "<button class=\"ds-btn-primary\">REQUEST ISSUER APPROVAL</button>",
+      "css": ".ds-btn-primary { min-height: 34px; padding: 8px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 2px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; color: var(--flap-black, #0d0d0f); background: var(--amber, #ffb400); border: 1px solid var(--amber, #ffb400); } .ds-btn-primary:hover:not(:disabled) { background: #ffc233; } .ds-btn-primary:disabled { opacity: .45; cursor: not-allowed; } .ds-btn-primary:focus-visible { outline: 2px solid var(--amber, #ffb400); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Flap-shadow plate with steel border for non-consequential actions.",
+      "html": "<button class=\"ds-btn-secondary\">RUN POLICY PREFLIGHT</button>",
+      "css": ".ds-btn-secondary { min-height: 34px; padding: 8px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 2px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; color: var(--flap-white, #f2f2f2); background: var(--flap-shadow, #1b1b1e); border: 1px solid var(--steel-dark, #7d858c); } .ds-btn-secondary:hover:not(:disabled) { background: var(--flap-raise, #232326); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--amber, #ffb400); outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "description": "Posted state chip; signal color carries the meaning — amber attention, red non-compliant, green resolved, steel neutral.",
+      "html": "<span class=\"ds-badge ds-badge-red\">BLOCKED</span> <span class=\"ds-badge ds-badge-amber\">AT RISK</span> <span class=\"ds-badge ds-badge-green\">EXECUTED</span> <span class=\"ds-badge\">OPEN</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 8px; border-radius: 2px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; color: var(--flap-white, #f2f2f2); background: var(--flap-shadow, #1b1b1e); box-shadow: inset 0 -1px 0 rgba(0,0,0,.5); } .ds-badge-red { color: var(--red, #d32f2f); } .ds-badge-amber { color: var(--amber, #ffb400); } .ds-badge-green { color: var(--green, #3fae6a); }"
+    },
+    {
+      "name": "Metric Card",
+      "kind": "card",
+      "description": "One readout cell on the board's strip: mono label, flap-posted value, small caption.",
+      "html": "<article class=\"ds-metric-card\"><div class=\"ds-metric-label\">EXPOSURE AT RISK</div><span class=\"ds-flap-text\"><span class=\"ds-flap-char\">$</span><span class=\"ds-flap-char\">3</span><span class=\"ds-flap-char\">.</span><span class=\"ds-flap-char\">9</span><span class=\"ds-flap-char\">6</span><span class=\"ds-flap-char\">M</span></span><span class=\"ds-metric-detail\">4 affected nodes</span></article>",
+      "css": ".ds-metric-card { padding: 12px 14px; background: #0a0a0c; display: grid; gap: 10px; justify-items: start; } .ds-metric-label { display: flex; align-items: center; gap: 7px; color: var(--ink, #8a8578); font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; } .ds-flap-text { display: inline-flex; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: .06em; color: var(--flap-white, #f2f2f2); } .ds-flap-char { min-width: .62em; padding: 1px 1.5px; text-align: center; background: var(--flap-shadow, #1b1b1e); background-image: linear-gradient(to bottom, transparent calc(50% - .5px), rgba(0,0,0,.55) calc(50% - .5px), rgba(0,0,0,.55) calc(50% + .5px), transparent calc(50% + .5px)); box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); border-radius: 1px; } .ds-metric-detail { color: var(--ink, #8a8578); font-size: 9.5px; font-family: 'Barlow', system-ui, sans-serif; }"
+    },
+    {
+      "name": "Board Table Row",
+      "kind": "custom",
+      "description": "A departures row: one entity per line with fixed columns and a flap-cell status chip.",
+      "html": "<div class=\"ds-board-row\"><span>BVNSPC RECEIPT</span><span class=\"ds-mono\">$1,250,000</span><span><span class=\"ds-flap-char ds-amber\">A</span><span class=\"ds-flap-char ds-amber\">T</span><span class=\"ds-flap-char\">&nbsp;</span><span class=\"ds-flap-char ds-amber\">R</span><span class=\"ds-flap-char ds-amber\">I</span><span class=\"ds-flap-char ds-amber\">S</span><span class=\"ds-flap-char ds-amber\">K</span></span><span class=\"ds-mono\">NSPC-4.2</span></div>",
+      "css": ".ds-board-row { display: grid; grid-template-columns: 1fr 110px 130px 150px; gap: 12px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--flap-raise, #232326); font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--flap-white, #f2f2f2); } .ds-board-row:hover { background: var(--flap-shadow, #1b1b1e); } .ds-mono { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0; } .ds-flap-char { display: inline-block; min-width: .62em; padding: 1px 1.5px; text-align: center; background: var(--flap-shadow, #1b1b1e); background-image: linear-gradient(to bottom, transparent calc(50% - .5px), rgba(0,0,0,.55) calc(50% - .5px), rgba(0,0,0,.55) calc(50% + .5px), transparent calc(50% + .5px)); box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); border-radius: 1px; } .ds-amber { color: var(--amber, #ffb400); }"
+    },
+    {
+      "name": "Navigation Item",
+      "kind": "nav",
+      "description": "Concourse column station sign; the active item is a lit row with an amber row-lamp dot.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-nav-item ds-nav-active\">INCIDENTS<span class=\"ds-nav-count\">1</span></button><button class=\"ds-nav-item\">AUDIT RECEIPTS</button><button class=\"ds-nav-item\">INTEGRATIONS</button></nav>",
+      "css": ".ds-nav { display: grid; gap: 2px; background: #0a0a0c; padding: 8px; } .ds-nav-item { position: relative; width: 100%; padding: 8px 11px; display: flex; align-items: center; gap: 9px; color: var(--steel, #8b8b92); background: transparent; border: 0; border-radius: 2px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; text-align: left; cursor: pointer; } .ds-nav-item:hover { color: var(--flap-white, #f2f2f2); background: var(--flap-shadow, #1b1b1e); } .ds-nav-active { color: var(--flap-white, #f2f2f2); background: var(--flap-shadow, #1b1b1e); } .ds-nav-active::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--amber, #ffb400); } .ds-nav-count { margin-left: auto; min-width: 18px; padding: 1px 5px; color: var(--flap-black, #0d0d0f); background: var(--red, #d32f2f); border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-align: center; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "description": "Flap-shadow plate with steel border; focus border turns delay-amber.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">REPLACEMENT WALLET</span><input class=\"ds-field-input\" type=\"text\" placeholder=\"0x…\" /></label>",
+      "css": ".ds-field { display: grid; gap: 6px; } .ds-field-label { color: var(--ink, #8a8578); font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; } .ds-field-input { padding: 9px 11px; color: var(--flap-white, #f2f2f2); background: var(--flap-shadow, #1b1b1e); border: 1px solid var(--steel-dark, #7d858c); border-radius: 2px; font-size: 12.5px; font-family: 'IBM Plex Mono', monospace; } .ds-field-input:focus { outline: none; border-color: var(--amber, #ffb400); }"
+    },
+    {
+      "name": "Audit Ticket",
+      "kind": "custom",
+      "description": "An issued receipt: route header, hash as the ticket code in mono, stamped fields below the perforation.",
+      "html": "<article class=\"ds-ticket\"><header class=\"ds-ticket-head\"><strong>RECEIPT demo:plan:incident-001</strong><span class=\"ds-badge-green ds-badge\">EXECUTED</span></header><div class=\"ds-ticket-body\"><div><span class=\"ds-mono\">ROUTE</span> 0x71A4…91C2 → 0xB0B0…0B01</div><div><span class=\"ds-mono\">HASH</span> 0x9f2c…e41a</div></div></article>",
+      "css": ".ds-ticket { background: #0a0a0c; border: 1px solid var(--flap-raise, #232326); border-radius: 2px; color: var(--flap-white, #f2f2f2); font-family: 'Barlow', system-ui, sans-serif; font-size: 12px; } .ds-ticket-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; } .ds-ticket-head strong { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; } .ds-badge { display: inline-flex; padding: 2px 8px; border-radius: 2px; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .14em; background: var(--flap-shadow, #1b1b1e); box-shadow: inset 0 -1px 0 rgba(0,0,0,.5); } .ds-badge-green { color: var(--green, #3fae6a); } .ds-ticket-body { padding: 10px 12px; display: grid; gap: 8px; border-top: 1px dashed var(--steel-dark, #7d858c); } .ds-mono { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink, #8a8578); letter-spacing: .1em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Concourse Board",
+    "overview": "The console is a rail concourse split-flap board at rush hour. Compliance state is not visualized, it is *posted*: positions are departures, statuses flip on the board, and every change cascades down the flaps in one mechanical ripple. The world is dark steel, flap-black cells, warm off-white capitals, and signal color used the way a concourse uses it — amber for attention, red for cancelled, green for the one shuttle that gets you home.\n\nMotion is the product's voice. A static SUTURE screen is a board between announcements; the signature moment is the cascade — a status change sweeping a row character by character. Every flap is a recorded event: append-only, truthful, labeled when the data is demo.",
+    "keyCharacteristics": [
+      "Split-flap cells with a visible horizontal split line and per-character cascade animation",
+      "Condensed all-caps grotesque for everything the board \"posts\"; mono only for identifiers and figures",
+      "Signal color discipline: amber = attention/action, red = non-compliant, green = resolved/repair",
+      "The lineage graph is the posted strip map beside the board — stations on a line, not floating cards",
+      "Receipts are issued tickets; approvals are stamped on the board, never implied by UI state"
+    ],
+    "rules": [
+      { "name": "The Signal Discipline Rule", "body": "Amber, red, and green each carry exactly one meaning (attention, non-compliant, repair/resolved). They never appear as accents, brand color, or decoration. If a screen uses signal color where no state changed, the screen is wrong.", "section": "colors" },
+      { "name": "The Posted Rule", "body": "If text represents state, it is set in the flap face, uppercase, inside cells. If it explains, it is body copy. The two never mix in one line.", "section": "typography" }
+    ],
+    "dos": [
+      "Do make every state change visible as a board event — cascade the row, flip the status.",
+      "Do keep demo labeling posted on the board itself (DEMO DATA reads like a service notice).",
+      "Do use mono for anything an auditor would copy: hashes, addresses, amounts, codes.",
+      "Do let one amber element own attention per view."
+    ],
+    "donts": [
+      "Don't use signal colors decoratively — they are state, not brand.",
+      "Don't introduce shadows, glass, gradients, or rounded-soft card language.",
+      "Don't set state text in sentence case or body font; the board posts in capitals.",
+      "Don't animate ambiently; motion happens when the record changes, never on a loop.",
+      "Don't imply a live provider, chain call, or verification the product has not performed."
+    ]
+  }
+}

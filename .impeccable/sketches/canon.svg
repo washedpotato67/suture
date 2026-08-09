@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="sans-serif">
+  <rect width="1200" height="750" fill="#0e1215"/>
+  <!-- sidebar -->
+  <rect x="0" y="0" width="220" height="750" fill="#12171b" stroke="#262d31"/>
+  <rect x="20" y="24" width="120" height="14" rx="3" fill="#353f44"/>
+  <g fill="#1c2329">
+    <rect x="16" y="80" width="188" height="30" rx="4"/><rect x="16" y="120" width="188" height="30" rx="4"/>
+    <rect x="16" y="160" width="188" height="30" rx="4"/><rect x="16" y="200" width="188" height="30" rx="4"/>
+    <rect x="16" y="240" width="188" height="30" rx="4"/>
+  </g>
+  <rect x="16" y="160" width="188" height="30" rx="4" fill="#17323a"/>
+  <!-- topbar -->
+  <rect x="220" y="0" width="980" height="56" fill="#12171b" stroke="#262d31"/>
+  <rect x="245" y="21" width="200" height="14" rx="3" fill="#353f44"/>
+  <!-- KPI cards -->
+  <g stroke="#262d31" fill="#141a1f">
+    <rect x="245" y="80" width="215" height="90" rx="6"/><rect x="475" y="80" width="215" height="90" rx="6"/>
+    <rect x="705" y="80" width="215" height="90" rx="6"/><rect x="935" y="80" width="215" height="90" rx="6"/>
+  </g>
+  <g fill="#353f44">
+    <rect x="262" y="98" width="90" height="9" rx="2"/><rect x="492" y="98" width="90" height="9" rx="2"/>
+    <rect x="722" y="98" width="90" height="9" rx="2"/><rect x="952" y="98" width="90" height="9" rx="2"/>
+  </g>
+  <g fill="#54e1e8">
+    <rect x="262" y="118" width="60" height="20" rx="3"/><rect x="492" y="118" width="60" height="20" rx="3"/>
+    <rect x="722" y="118" width="60" height="20" rx="3"/><rect x="952" y="118" width="60" height="20" rx="3"/>
+  </g>
+  <!-- table panel -->
+  <rect x="245" y="195" width="905" height="300" rx="6" fill="#141a1f" stroke="#262d31"/>
+  <g fill="#1c2329">
+    <rect x="262" y="215" width="870" height="26" rx="3"/><rect x="262" y="250" width="870" height="26" rx="3"/>
+    <rect x="262" y="285" width="870" height="26" rx="3"/><rect x="262" y="320" width="870" height="26" rx="3"/>
+    <rect x="262" y="355" width="870" height="26" rx="3"/><rect x="262" y="390" width="870" height="26" rx="3"/>
+    <rect x="262" y="425" width="870" height="26" rx="3"/>
+  </g>
+  <!-- chart panel -->
+  <rect x="245" y="520" width="905" height="190" rx="6" fill="#141a1f" stroke="#262d31"/>
+  <polyline points="270,680 380,640 490,655 600,600 710,620 820,570 930,585 1040,545 1120,560"
+    fill="none" stroke="#54e1e8" stroke-width="2.5"/>
+</svg>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SUTURE — Product Console</title>
+<link rel="stylesheet" href="../src/styles.css" />
+<style>
+  .static-link { text-decoration:none; }
+  .static-panel { margin-bottom:11px; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand-row">
+      <div class="brand-mark"><span></span><span></span><span></span></div>
+      <div><strong>SUTURE</strong><small>COMPLIANCE CONTINUITY</small></div>
+    </div>
+    <button class="org-switcher"><span>◆</span><span><strong>Northstar Capital — DEMO DATA</strong><small>Issuer workspace</small></span><span>⌄</span></button>
+    <nav>
+      <div class="nav-label">OPERATIONS</div>
+      <button class="nav-active">▦ Overview</button>
+      <button>⑂ Lineage</button>
+      <button>⚠ Incidents <span class="nav-count">1</span></button>
+      <button>▤ Audit receipts</button>
+      <button>◌ Integrations</button>
+      <div class="nav-label">ADMINISTRATION</div>
+      <button>◇ Policies</button><button>✓ Identities</button><button>⚙ Settings</button>
+    </nav>
+    <div class="sidebar-footer"><div class="operator-avatar">OP</div><div><strong>Demo Operator</strong><small>Compliance operator</small></div><span>↗</span></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><div class="breadcrumb">NORTHSTAR / OVERVIEW</div><h1>Compliance operations</h1></div><div class="topbar-status"><span class="status-badge status-muted">DEMO DATA</span><span class="status-badge status-warn">LOCAL DEMO</span></div></header>
+    <div class="content">
+      <section class="product-intro"><div><div class="eyebrow">COMPLIANCE THAT SURVIVES COMPOSITION.</div><p>Trace every derived position. Repair every broken policy path.</p></div><button class="secondary-button">✓ Run policy preflight</button></section>
+      <section class="metric-grid">
+        <article class="metric-card"><div class="metric-label">▣ Assets monitored</div><strong>1</strong><span>1 active policy</span></article>
+        <article class="metric-card"><div class="metric-label">⌁ Derived positions</div><strong>3</strong><span>2 protocols</span></article>
+        <article class="metric-card"><div class="metric-label">⚠ Exposure at risk</div><strong>$3.96M</strong><span>4 affected nodes</span></article>
+        <article class="metric-card"><div class="metric-label">◉ Open incidents</div><strong>1</strong><span>critical</span></article>
+      </section>
+      <section class="two-column">
+        <article class="panel incident-card">
+          <div class="panel-heading compact"><div><div class="eyebrow">⚠ ACTIVE INCIDENT</div><h2>Credential revoked after downstream composition</h2></div><span class="status-badge status-bad">CRITICAL</span></div>
+          <p>The source holder credential was revoked after the note was deposited, wrapped, and used as collateral.</p>
+          <div class="incident-sequence">
+            <div class="sequence-item complete"><span>1</span><div><strong>Revocation received</strong><small>Credential fixture changed to revoked.</small></div></div>
+            <div class="sequence-item complete"><span>2</span><div><strong>Blast radius calculated</strong><small>Four downstream positions identified.</small></div></div>
+            <div class="sequence-item active"><span>3</span><div><strong>Movement blocked</strong><small>New deposit, transfer, and redemption fail preflight.</small></div></div>
+            <div class="sequence-item"><span>4</span><div><strong>Approval required</strong><small>Replacement-wallet migration has not been authorized.</small></div></div>
+          </div><button class="primary-button">Open incident console</button>
+        </article>
+        <article class="panel">
+          <div class="panel-heading compact"><div><div class="eyebrow">✓ POLICY PREFLIGHT</div><h2>Proposed receipt transfer</h2></div><span class="status-badge status-bad">BLOCKED</span></div>
+          <div class="check-list">
+            <div class="check-row"><span class="check-dot check-fail"></span><div><strong>Holder credential</strong><small>The active wallet credential is revoked.</small></div><code>CVI_REVOKED</code></div>
+            <div class="check-row"><span class="check-dot check-pass"></span><div><strong>Asset provenance</strong><small>Demo provenance remains valid under NSPC-4.2.</small></div><code>CVA_ASSET_VALID</code></div>
+            <div class="check-row"><span class="check-dot check-fail"></span><div><strong>Policy continuity</strong><small>New movement is blocked across all derived positions.</small></div><code>POSITION_INELIGIBLE</code></div>
+            <div class="check-row"><span class="check-dot check-unknown"></span><div><strong>Safe remediation path</strong><small>Issuer approval is required before migration.</small></div><code>APPROVAL_REQUIRED</code></div>
+          </div><div class="demo-callout">DEMO DATA — no Cleanverse or Monad request was executed.</div>
+        </article>
+      </section>
+      <section class="panel lineage-panel static-panel">
+        <div class="panel-heading"><div><div class="eyebrow">⑂ POSITION LINEAGE</div><h2>Revocation propagated across four positions</h2></div><div class="heading-actions"><span class="status-badge status-bad">CRITICAL INCIDENT</span><span class="status-badge status-muted">DEMO DATA</span></div></div>
+        <div class="lineage-layout">
+          <div class="graph-wrap">
+            <svg viewBox="0 0 960 430" class="lineage-svg">
+              <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" class="arrow-head"></path></marker></defs>
+              <path d="M 280 230 C 335 230, 335 230, 390 230" class="lineage-edge" marker-end="url(#arrow)"></path><text x="335" y="218" class="edge-label">deposit</text>
+              <path d="M 580 230 C 635 230, 635 150, 690 150" class="lineage-edge" marker-end="url(#arrow)"></path><text x="635" y="180" class="edge-label">collateralize</text>
+              <path d="M 880 150 C 900 150, 900 335, 880 335" class="lineage-edge" marker-end="url(#arrow)"></path><text x="906" y="242" class="edge-label">borrow</text>
+              <g transform="translate(90 185)" class="node-group"><rect width="190" height="90" rx="7" class="graph-node graph-node-warn graph-node-selected"></rect><circle cx="18" cy="20" r="5" class="node-dot node-dot-warn"></circle><text x="31" y="24" class="node-kind">ASSET</text><text x="16" y="49" class="node-title">Northstar Private Credit…</text><text x="16" y="70" class="node-meta">$1,250,000 · NSPC-4.2</text></g>
+              <g transform="translate(390 185)" class="node-group"><rect width="190" height="90" rx="7" class="graph-node graph-node-warn"></rect><circle cx="18" cy="20" r="5" class="node-dot node-dot-warn"></circle><text x="31" y="24" class="node-kind">VAULT RECEIPT</text><text x="16" y="49" class="node-title">bvNSPC Receipt</text><text x="16" y="70" class="node-meta">$1,250,000 · NSPC-4.2</text></g>
+              <g transform="translate(690 105)" class="node-group"><rect width="190" height="90" rx="7" class="graph-node graph-node-bad"></rect><circle cx="18" cy="20" r="5" class="node-dot node-dot-bad"></circle><text x="31" y="24" class="node-kind">COLLATERAL</text><text x="16" y="49" class="node-title">MockCredit Collateral</text><text x="16" y="70" class="node-meta">$850,000 · NSPC-4.2</text></g>
+              <g transform="translate(690 290)" class="node-group"><rect width="190" height="90" rx="7" class="graph-node graph-node-bad"></rect><circle cx="18" cy="20" r="5" class="node-dot node-dot-bad"></circle><text x="31" y="24" class="node-kind">DEBT</text><text x="16" y="49" class="node-title">USDC Borrow Position</text><text x="16" y="70" class="node-meta">$612,000 · NSPC-4.2</text></g>
+            </svg>
+            <div class="graph-summary"><div><span>AFFECTED VALUE</span><strong>$3,962,000</strong></div><div><span>POSITIONS</span><strong>4</strong></div><div><span>POLICY</span><strong>NSPC-4.2</strong></div></div>
+          </div>
+          <aside class="node-inspector"><div class="eyebrow">SELECTED POSITION</div><h3>Northstar Private Credit Note 2028</h3><p>Source CVA / restricted RWA</p><dl><div><dt>Value</dt><dd>$1,250,000</dd></div><div><dt>Wallet</dt><dd class="mono">0x71A4…91C2</dd></div><div><dt>Policy version</dt><dd>NSPC-4.2</dd></div><div><dt>Credential</dt><dd><span class="status-badge status-bad">REVOKED</span></dd></div><div><dt>Evidence</dt><dd><span class="status-badge status-warn">ASSERTED</span></dd></div></dl><div class="inspector-warning">⚠ This position requires remediation.</div><button class="secondary-button">✓ Review incident</button></aside>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

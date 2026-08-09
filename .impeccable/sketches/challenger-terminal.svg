@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="monospace">
+  <rect width="1200" height="750" fill="#020a06"/>
+  <!-- scanlines -->
+  <g stroke="#0d2817" stroke-width="1">
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/><line x1="0" y1="600" x2="1200" y2="600"/>
+    <line x1="0" y1="660" x2="1200" y2="660"/>
+  </g>
+  <g fill="#33ff66" font-size="15">
+    <text x="48" y="56">SUTURE.SYS — COMPLIANCE CONTINUITY MONITOR ▮</text>
+    <text x="48" y="76" fill="#1d8a43">────────────────────────────────────────────────────────────────────────</text>
+    <text x="48" y="110">> ingest cvi.event ............. CREDENTIAL_REVOKED [critical]</text>
+    <text x="48" y="136">> trace lineage ................ 4 positions, 3 edges, policy NSPC-4.2</text>
+    <text x="48" y="162">> blast_radius ................. Σ $3,962,000</text>
+    <text x="48" y="188">> preflight transfer ........... BLOCKED (CVI_REVOKED)</text>
+    <text x="48" y="214">> preflight redeem ............. BLOCKED (DERIVED_POSITION_INELIGIBLE)</text>
+  </g>
+  <g fill="#9db850" font-size="15" opacity="0.55">
+    <text x="48" y="248">> plan draft ................... wallet_migration, idem demo:plan:incident-001</text>
+    <text x="48" y="274">> awaiting operator ............ request_approval</text>
+  </g>
+  <!-- node status block -->
+  <rect x="48" y="310" width="520" height="180" fill="none" stroke="#1d8a43" stroke-width="1.5"/>
+  <g fill="#33ff66" font-size="14">
+    <text x="64" y="338">POSITION              VALUE        STATE</text>
+    <text x="64" y="364" fill="#1d8a43">──────────────────────────────────────────</text>
+    <text x="64" y="390">source asset          $1,250,000   at_risk</text>
+    <text x="64" y="416">vault receipt         $1,250,000   at_risk</text>
+    <text x="64" y="442">collateral            $850,000     blocked</text>
+    <text x="64" y="468">debt                  $612,000     blocked</text>
+  </g>
+  <!-- ascii lineage -->
+  <g fill="#33ff66" font-size="14">
+    <text x="640" y="330">[asset]──deposit──▶[receipt]──┬─collateralize─▶[collateral]</text>
+    <text x="640" y="356" fill="#1d8a43">   ✂ thread cut: cvi revoked  └─borrow────────▶[debt]</text>
+  </g>
+  <!-- bracket buttons -->
+  <g font-size="16">
+    <rect x="48" y="540" width="300" height="44" fill="#33ff66"/>
+    <text x="76" y="568" fill="#020a06" font-weight="bold">[ REQUEST APPROVAL ]</text>
+    <rect x="372" y="540" width="220" height="44" fill="none" stroke="#33ff66" stroke-width="1.5"/>
+    <text x="404" y="568" fill="#33ff66">[ VIEW RECEIPT ]</text>
+    <rect x="616" y="540" width="200" height="44" fill="none" stroke="#1d8a43" stroke-width="1.5"/>
+    <text x="656" y="568" fill="#1d8a43">[ PREFLIGHT ]</text>
+  </g>
+  <text x="48" y="650" fill="#1d8a43" font-size="13">// audit transcript is append-only · evidence: asserted (DEMO DATA) · no external calls executed</text>
+  <text x="48" y="690" fill="#33ff66" font-size="16">> ▮</text>
+</svg>

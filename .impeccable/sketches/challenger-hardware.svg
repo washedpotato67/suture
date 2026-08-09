@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="monospace">
+  <rect width="1200" height="750" fill="#181d20"/>
+  <!-- chassis -->
+  <rect x="60" y="60" width="1080" height="630" rx="18" fill="#3e4146" stroke="#10141
+6" stroke-width="3"/>
+  <rect x="60" y="60" width="1080" height="630" rx="18" fill="none" stroke="#5a6068" stroke-width="1"/>
+  <circle cx="90" cy="90" r="10" fill="#2a2e33" stroke="#101416" stroke-width="2"/>
+  <circle cx="1110" cy="90" r="10" fill="#2a2e33" stroke="#101416" stroke-width="2"/>
+  <circle cx="90" cy="660" r="10" fill="#2a2e33" stroke="#101416" stroke-width="2"/>
+  <circle cx="1110" cy="660" r="10" fill="#2a2e33" stroke="#101416" stroke-width="2"/>
+  <!-- amber status screen -->
+  <rect x="420" y="100" width="360" height="120" rx="8" fill="#101416" stroke="#10141
+6"/>
+  <text x="450" y="140" font-size="13" fill="#ffb000">EXPOSURE AT RISK</text>
+  <text x="450" y="195" font-size="42" fill="#ffb000">$3.96M</text>
+  <text x="660" y="195" font-size="13" fill="#b97f00">4 POSITIONS</text>
+  <!-- keycap grid -->
+  <g font-size="13" text-anchor="middle">
+    <!-- row 1 -->
+    <g>
+      <rect x="120" y="280" width="110" height="64" rx="8" fill="#e6e2da" stroke="#8b94a6" stroke-width="2"/>
+      <text x="175" y="318" fill="#181d20">LINEAGE</text>
+      <rect x="250" y="280" width="110" height="64" rx="8" fill="#e6e2da" stroke="#8b94a6" stroke-width="2"/>
+      <text x="305" y="318" fill="#181d20">INCIDENT</text>
+      <rect x="380" y="280" width="110" height="64" rx="8" fill="#e6e2da" stroke="#8b94a6" stroke-width="2"/>
+      <text x="435" y="318" fill="#181d20">RECEIPTS</text>
+      <rect x="510" y="280" width="110" height="64" rx="8" fill="#b9b4a6" stroke="#8b94a6" stroke-width="2"/>
+      <text x="565" y="318" fill="#181d20">POLICY</text>
+      <rect x="640" y="280" width="110" height="64" rx="8" fill="#b9b4a6" stroke="#8b94a6" stroke-width="2"/>
+      <text x="695" y="318" fill="#181d20">IDENTITY</text>
+    </g>
+    <!-- row 2 -->
+    <g>
+      <rect x="120" y="370" width="110" height="64" rx="8" fill="#b9b4a6" stroke="#8b94a6" stroke-width="2"/>
+      <text x="175" y="408" fill="#181d20">PREFLIGHT</text>
+      <rect x="250" y="370" width="110" height="64" rx="8" fill="#b9b4a6" stroke="#8b94a6" stroke-width="2"/>
+      <text x="305" y="408" fill="#181d20">REQUEST</text>
+      <rect x="380" y="370" width="110" height="64" rx="8" fill="#e6e2da" stroke="#8b94a6" stroke-width="2"/>
+      <text x="435" y="408" fill="#181d20">APPROVE</text>
+      <rect x="510" y="370" width="110" height="64" rx="8" fill="#b9b4a6" stroke="#8b94a6" stroke-width="2"/>
+      <text x="565" y="408" fill="#181d20">REJECT</text>
+      <!-- the one orange key -->
+      <rect x="640" y="370" width="110" height="64" rx="8" fill="#ff6a1a" stroke="#c24e08" stroke-width="2"/>
+      <text x="695" y="408" fill="#181d20" font-weight="bold">EXECUTE</text>
+    </g>
+  </g>
+  <!-- knobs -->
+  <g>
+    <circle cx="900" cy="330" r="46" fill="#4a4f55" stroke="#101416" stroke-width="3"/>
+    <circle cx="900" cy="330" r="34" fill="#3e4146" stroke="#5a6068" stroke-width="1"/>
+    <line x1="900" y1="330" x2="922" y2="302" stroke="#e6e2da" stroke-width="4"/>
+    <circle cx="1020" cy="330" r="46" fill="#4a4f55" stroke="#101416" stroke-width="3"/>
+    <circle cx="1020" cy="330" r="34" fill="#3e4146" stroke="#5a6068" stroke-width="1"/>
+    <line x1="1020" y1="330" x2="1020" y2="296" stroke="#e6e2da" stroke-width="4"/>
+    <text x="900" y="408" font-size="11" fill="#8b94a6" text-anchor="middle">BLAST RADIUS</text>
+    <text x="1020" y="408" font-size="11" fill="#8b94a6" text-anchor="middle">POLICY REV</text>
+  </g>
+  <!-- legend strip -->
+  <text x="120" y="520" font-size="13" fill="#8b94a6">SUTURE · BENCH UNIT 01 — COMPLIANCE CONTINUITY INSTRUMENT</text>
+  <rect x="120" y="545" width="960" height="4" fill="#2a2e33"/>
+  <text x="120" y="590" font-size="12" fill="#5a6068">AMBER SCREEN REPORTS ONE VALUE · ORANGE KEY COMMITS THE CONSEQUENTIAL ACTION</text>
+</svg>
