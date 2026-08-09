@@ -54,11 +54,15 @@ Every record that carries a compliance assertion has an evidence state: `none`, 
 - Authenticated browser clients only receive table `SELECT` permissions. Security-definer functions own onboarding and remediation lifecycle writes.
 - Immutable policy versions, credential observations, lineage edges, snapshots, approvals, remediation actions, receipts, and audit events reject updates and deletes.
 - Remediation approval and execution require an owner or issuer administrator. The execution function locks the plan row, returns the existing receipt on replay, and records a simulated action only for the labeled demo scenario.
-- A non-demo plan has no live executor in v0.1. It fails before an external action is attempted. Future external execution must persist an `uncertain` action after a submission whose result is not independently confirmed, then reconcile before retry.
+- Live execution runs through `suture-executor`, which records the transaction hash before broadcast, waits for a receipt, and issues an audit receipt bound to the chain result. An unobserved outcome is persisted as `uncertain` with the hash retained, and reconciliation settles it from chain state. Outcomes are written as superseding append-only rows; the submission row is never rewritten. The executor RPCs are service-role only.
 
 ## Contracts
 
-The contracts are scaffolds, not deployed system components:
+The contracts are deployed to Monad testnet (chain `10143`) and all eight are
+`exact_match` source-verified on Sourcify. Addresses and transaction hashes are
+in `docs/MONAD.md`. The asset and eligibility oracle are mocks, so the slice
+demonstrates the policy and lineage mechanism rather than a regulated
+instrument, and the contracts are not independently audited.
 
 - `PolicyManifestRegistry` stores immutable historical policy versions, active references, issuer control, policy-authority control, and emergency mode. Future versions are rejected until an authorized scheduler exists, so an inactive future version never replaces an enforceable one.
 - `PositionLineageRegistry` permits registered protocol recorders to append source and derived position edges with owner, transaction, policy, timestamp, and asserted evidence. Contracts cannot self-label provenance as verified.
@@ -66,7 +70,16 @@ The contracts are scaffolds, not deployed system components:
 - `MockCreditMarket` locks a vault receipt after eligibility and policy checks, emits collateral and debt lineage, and releases collateral only after repayment.
 - `RemediationEscrow` accepts assets only from an allowlisted vault after policy-authority opening and approval. It verifies the expected asset balance increase before funding and releases only funded user-authorized recovery assets to the replacement wallet.
 
-No Monad RPC call, contract deployment, transaction, Cleanverse request, credential verification, or indexer observation has been executed or verified by this repository. Cleanverse lists `monad` as a chain label but supplies no Monad deployment addresses, RPC endpoint, or chain ID. See `docs/MONAD_CLEANVERSE.md`.
+Policy activation, a deposit that recorded on-chain lineage, and a complete
+remediation cycle — open, approve with a separate key, fund from the source
+wallet, release — have all been executed on testnet and verified from their
+receipts. Live Cleanverse requests and credential evaluation are recorded in
+`docs/CLEANVERSE_VERIFICATION.md`.
+
+No indexer observation exists: chain reads are point-in-time JSON-RPC, with no
+synced cursor, reorg handling, or backfill. Cleanverse lists `monad` as a chain
+label but supplies no Monad deployment addresses, RPC endpoint, or chain ID, so
+the deployment map is SUTURE's own. See `docs/MONAD_CLEANVERSE.md`.
 
 ## Operational paths
 
