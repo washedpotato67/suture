@@ -38,7 +38,7 @@ Everything below is reproducible from this repository. Dates are 2026-08-09.
 
 Read next: `docs/CVI_CVA_INTEGRATION.md` for capability depth, `docs/LIMITATIONS.md`
 for everything not claimed, `docs/SECURITY_REVIEW.md` for findings,
-`docs/SCALABILITY.md` for the cost shape, `docs/DEMO_SCRIPT.md` to run it.
+and `docs/SCALABILITY.md` for the cost shape.
 
 ## What is not claimed
 

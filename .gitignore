@@ -23,3 +23,6 @@ supabase/.branches/
 .vscode/
 .idea/
 .vercel
+
+# Presentation notes — local only
+docs/DEMO_SCRIPT.md
