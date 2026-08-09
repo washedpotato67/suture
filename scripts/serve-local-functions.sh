@@ -42,6 +42,9 @@ trap 'rm -f "$ENV_FILE"' EXIT INT TERM
   echo "MONAD_ESCROW_ADDRESS=${MONAD_ESCROW_ADDRESS:-0x9e680fd3e2743ff0691d27fbea7a3bf418fa4765}"
   echo "MONAD_POLICY_REGISTRY=${MONAD_POLICY_REGISTRY:-0x586c5f4c0d64597c7ffcf5841521e6f0045935d2}"
   echo "MONAD_ASSET_ADDRESS=${MONAD_ASSET_ADDRESS:-0x2d22e91d030143a96cf06de2e53520606f8c60f6}"
+  echo "MONAD_LINEAGE_REGISTRY=${MONAD_LINEAGE_REGISTRY:-0xbf42ac2a7ece0a18915cf50bc5707184d85d9f98}"
+  # keccak256 of the LineageRecorded signature; verified against a real log.
+  echo "MONAD_LINEAGE_TOPIC=${MONAD_LINEAGE_TOPIC:-0xc11c7df83c1be29367bdac609abca055ef1fbb0fc29545f154f81f333d6b6f53}"
   EXEC_KEY="$(security find-generic-password -a "$KEYCHAIN_ACCOUNT" -s "suture.monad.testnet.executor-key" -w 2>/dev/null || true)"
   [ -n "$EXEC_KEY" ] && echo "MONAD_EXECUTOR_KEY=$EXEC_KEY"
 } >"$ENV_FILE"
