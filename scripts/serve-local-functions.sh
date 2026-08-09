@@ -35,6 +35,14 @@ trap 'rm -f "$ENV_FILE"' EXIT INT TERM
   echo "CLEANVERSE_ENVIRONMENT=sandbox"
   echo "CLEANVERSE_API_ID=$API_ID"
   echo "CLEANVERSE_API_KEY=$API_KEY"
+  # Chain executor. Absent values block live execution rather than falling back
+  # to a simulation, so it is safe to run without them.
+  echo "MONAD_RPC_URL=${MONAD_RPC_URL:-https://testnet-rpc.monad.xyz}"
+  echo "MONAD_CHAIN_ID=${MONAD_CHAIN_ID:-10143}"
+  echo "MONAD_ESCROW_ADDRESS=${MONAD_ESCROW_ADDRESS:-0x1a5dbdff02bd4a1faead7482a131755f1e4d8949}"
+  echo "MONAD_ASSET_ADDRESS=${MONAD_ASSET_ADDRESS:-0x2d22e91d030143a96cf06de2e53520606f8c60f6}"
+  EXEC_KEY="$(security find-generic-password -a "$KEYCHAIN_ACCOUNT" -s "suture.monad.testnet.deploy-key" -w 2>/dev/null || true)"
+  [ -n "$EXEC_KEY" ] && echo "MONAD_EXECUTOR_KEY=$EXEC_KEY"
 } >"$ENV_FILE"
 
 supabase functions serve --env-file "$ENV_FILE" "$@"

@@ -113,7 +113,11 @@ port = 54324
 # sender_name = "Admin"
 
 [storage]
-enabled = true
+# SUTURE stores no files — evidence references are opaque identifiers, never
+# uploaded objects. Disabled because the local storage image can fail its own
+# migration check ("Migration optimize-existing-functions-again not found") and
+# block the whole stack from starting, for a service the project never calls.
+enabled = false
 # The maximum file size allowed (e.g. "5MB", "500KB").
 file_size_limit = "50MiB"
 
