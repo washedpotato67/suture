@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="SUTURE">
+  <title>SUTURE</title>
+  <!--
+    The SUTURE mark: a single continuous thread doubling back on itself twice to
+    form an S, crossed by two stitches. Browser tab strips are light or dark
+    depending on the OS theme, so the stroke follows the viewer's scheme.
+  -->
+  <style>
+    .mark { stroke: #0b0d0f; }
+    @media (prefers-color-scheme: dark) { .mark { stroke: #f2f2f2; } }
+  </style>
+  <g class="mark" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- The thread: top bar, U-turn left, middle bar, U-turn right, bottom bar. -->
+    <path d="M 42 12 L 18 12 A 6 6 0 0 0 18 24 L 32 24 A 6 6 0 0 1 32 36 L 6 36" />
+    <!-- Two stitches crossing the seam. -->
+    <path d="M 22 19 L 22 29" stroke-width="2.4" />
+    <path d="M 27 19 L 27 29" stroke-width="2.4" />
+  </g>
+</svg>
