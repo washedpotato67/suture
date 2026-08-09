@@ -45,7 +45,7 @@ SUTURE lets an issuer or protocol operator answer three operational questions:
 - One credential-revocation incident.
 - Blast-radius calculation.
 - Read-only incident and lineage console.
-- Deterministic Cleanverse and Monad demo adapters.
+- Live Cleanverse provider evaluation and a Monad testnet contract deployment, with a labelled deterministic fallback when neither is configured.
 
 ## Explicit non-goals for v0.1
 
