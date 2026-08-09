@@ -3,6 +3,7 @@ import { AlertTriangle, RotateCw, ShieldCheck } from "lucide-react";
 import type { PreflightResult, WorkspaceAsset } from "../domain/types";
 import type { WorkspaceWallet } from "../lib/data";
 import { StatusBadge } from "./StatusBadge";
+import { Select } from "./Select";
 
 interface PreflightProps {
   assets: WorkspaceAsset[];
@@ -26,9 +27,17 @@ export function Preflight({ assets, wallets, result, busy, error, connected, onR
     <section className="panel">
       <div className="panel-heading compact"><div><h2>Policy preflight</h2><p>Server-authoritative policy evaluation before a consequential action.</p></div>{result && <StatusBadge tone={decisionTone}>{result.decision}</StatusBadge>}</div>
       <div className="preflight-form">
-        <label>Source asset<select value={asset?.id ?? ""} onChange={(event) => setAssetId(event.target.value)}>{assets.map((item) => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label>
-        <label>Wallet<select value={wallet?.id ?? ""} onChange={(event) => setWalletId(event.target.value)}>{wallets.map((item) => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label>
-        <label>Proposed action<select value={action} onChange={(event) => setAction(event.target.value)}><option value="transfer">Transfer</option><option value="deposit">Deposit</option><option value="collateralize">Collateralize</option><option value="borrow">Borrow</option><option value="restricted_exit">Restricted exit</option></select></label>
+        <Select label="Source asset" value={asset?.id ?? ""} onChange={setAssetId}
+          options={assets.map((item) => ({ value: item.id, label: item.label }))} />
+        <Select label="Wallet" value={wallet?.id ?? ""} onChange={setWalletId}
+          options={wallets.map((item) => ({ value: item.id, label: item.label }))} />
+        <Select label="Proposed action" value={action} onChange={setAction} options={[
+          { value: "transfer", label: "Transfer" },
+          { value: "deposit", label: "Deposit" },
+          { value: "collateralize", label: "Collateralize" },
+          { value: "borrow", label: "Borrow" },
+          { value: "restricted_exit", label: "Restricted exit" },
+        ]} />
       </div>
       <div className="plan-actions"><button className="primary-button" type="button" disabled={busy || !asset || !wallet || !connected} onClick={() => asset && wallet && onRun({ asset, wallet, action })}><ShieldCheck size={15} />{busy ? "Evaluating…" : "Run server preflight"}</button>{!connected && <span className="muted-copy">A connected session is required for a provider evaluation.</span>}</div>
       {error && <div className="form-error" role="alert"><AlertTriangle size={15} /> {error} Retry after the local function route is available.</div>}

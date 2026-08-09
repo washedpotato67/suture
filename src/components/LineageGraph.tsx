@@ -4,6 +4,7 @@ import { calculateBlastRadius } from "../domain/lineage";
 import type { Incident, LineageEdge, LineageNode } from "../domain/types";
 import { formatUsd } from "../lib/data";
 import { StatusBadge } from "./StatusBadge";
+import { Select } from "./Select";
 
 const width = 960;
 const height = 430;
@@ -90,7 +91,13 @@ export function LineageGraph({ nodes, edges, incident, onOpenIncident }: Lineage
           </h2>
         </div>
         <div className="heading-actions">
-          <label className="graph-filter">Filter<select value={filter} onChange={(event) => setFilter(event.target.value as typeof filter)}><option value="all">All positions</option><option value="at_risk">At risk</option><option value="blocked">Blocked</option></select></label>
+          <Select label="Filter" className="graph-filter" value={filter}
+            onChange={(next) => setFilter(next as typeof filter)}
+            options={[
+              { value: "all", label: "All positions" },
+              { value: "at_risk", label: "At risk" },
+              { value: "blocked", label: "Blocked" },
+            ]} />
           {incidentOpen && <StatusBadge tone="bad">{incident.severity.toUpperCase()} INCIDENT</StatusBadge>}
         </div>
       </div>
