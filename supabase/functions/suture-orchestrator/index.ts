@@ -134,6 +134,43 @@ async function persistProviderDecision(
   if (decisionInsert.error) throw new Error(`Cleanverse decision persistence failed: ${decisionInsert.error.message}`);
 }
 
+/**
+ * Capability-scoped diagnostics.
+ *
+ * CVI, CVA and CCP are capability names, not Cleanverse V5.6 module names. Each
+ * row therefore records the documented endpoint it maps to, so the console shows
+ * the capability surface without implying an API that does not exist.
+ */
+const CAPABILITY_PROVIDERS = {
+  CVI: { provider: "Cleanverse A-Pass \u00b7 CVI", kind: "identity", api: "POST /query_apass" },
+  CVA: { provider: "Cleanverse A-Token \u00b7 CVA", kind: "asset_scope", api: "POST /verify_apass, POST /atoken/rules" },
+  CCP: { provider: "Cleanverse Validator \u00b7 CCP", kind: "policy_scope", api: "POST /validator/verify" },
+} as const;
+
+async function upsertCapability(
+  service: ReturnType<typeof createClient>,
+  organizationId: string,
+  capability: keyof typeof CAPABILITY_PROVIDERS,
+  state: "connected" | "unavailable" | "misconfigured",
+  detail: string,
+  extra: Record<string, unknown> = {},
+) {
+  const meta = CAPABILITY_PROVIDERS[capability];
+  const result = await service.from("integration_connections").upsert({
+    organization_id: organizationId,
+    provider: meta.provider,
+    kind: meta.kind,
+    mode: state === "connected" ? "connected" : "degraded",
+    status: state,
+    diagnostic_state: state,
+    endpoint_label: detail,
+    last_checked_at: new Date().toISOString(),
+    config: { capability, documented_api: meta.api, providerApi: "Cleanverse Cooperate V5.6", ...extra },
+  }, { onConflict: "organization_id,provider" });
+  if (result.error) throw new Error(`capability diagnostic persistence failed: ${result.error.message}`);
+}
+
+/** Marks every Cleanverse capability with the same state, for whole-boundary faults. */
 async function upsertCleanverseDiagnostic(
   service: ReturnType<typeof createClient>,
   organizationId: string,
@@ -141,19 +178,9 @@ async function upsertCleanverseDiagnostic(
   detail: string,
   errorCode?: string,
 ) {
-  const result = await service.from("integration_connections").upsert({
-    organization_id: organizationId,
-    provider: "Cleanverse A-Pass",
-    kind: "identity",
-    mode: state === "connected" ? "connected" : "degraded",
-    status: state,
-    diagnostic_state: state,
-    endpoint_label: detail,
-    last_checked_at: new Date().toISOString(),
-    last_error_code: errorCode ?? null,
-    config: { providerApi: "Cleanverse Cooperate V5.6", documentedCapability: "query_apass" },
-  }, { onConflict: "organization_id,provider" });
-  if (result.error) throw new Error(`Cleanverse diagnostic persistence failed: ${result.error.message}`);
+  for (const capability of ["CVI", "CVA", "CCP"] as const) {
+    await upsertCapability(service, organizationId, capability, state, detail, errorCode ? { lastErrorCode: errorCode } : {});
+  }
 }
 
 async function preflight(
@@ -325,7 +352,24 @@ async function preflight(
         observedAt: providerCredential.observedAt,
       },
     });
-    await upsertCleanverseDiagnostic(service, body.organizationId, "connected", "A-Pass status was evaluated through Cleanverse Cooperate V5.6.");
+    await upsertCapability(
+      service, body.organizationId, "CVI", "connected",
+      `A-Pass ${credentialStatus} observed via query_apass.`,
+      { credentialStatus, providerReference: providerCredential.providerReference ?? null, evidence: "verified" },
+    );
+    if (scope && actionEvaluation) {
+      const capability = scope.kind === "atoken" ? "CVA" : "CCP";
+      await upsertCapability(
+        service, body.organizationId, capability, "connected",
+        `${actionEvaluation.decision} \u00b7 ${actionEvaluation.reasonCode} on chain ${scope.chain}.`,
+        { decision: actionEvaluation.decision, reasonCode: actionEvaluation.reasonCode, scopeAddress: scope.address, evidence: "verified" },
+      );
+    } else {
+      await upsertCapability(
+        service, body.organizationId, "CVA", "unavailable",
+        "No documented A-Token or validator scope is configured for this asset.",
+      );
+    }
     return {
       status: 200,
       body: {
