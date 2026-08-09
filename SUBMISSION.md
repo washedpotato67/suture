@@ -70,9 +70,10 @@ asserts that a decision on one chain governs a position on another.
 
 The contracts are **not independently audited**, including a scheduler written
 during this build that holds policy authority. The deployment uses a mock asset
-and mock oracle. The sandbox API key was exposed in a session log and could not
-be rotated, so provider results are reproducible but not independently
-trustworthy provenance. Chain reads are point-in-time, not indexed.
+and mock oracle, so the slice demonstrates the policy and lineage mechanism
+rather than a regulated instrument. Chain reads are point-in-time, not indexed —
+no synced cursor, no reorg handling. Credential freshness depends on polling,
+because V5.6 documents no revocation webhook.
 
 All of it, with the evidence for everything we do claim, is in
 `docs/LIMITATIONS.md`, `docs/SECURITY_REVIEW.md`, and `docs/DEPLOYMENTS.md`.
