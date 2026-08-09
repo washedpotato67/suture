@@ -37,6 +37,7 @@ import {
   rpcExecutePlan,
   rpcRequestApproval,
   runServerPreflight,
+  runChainExecutor,
   type WorkspaceData,
 } from "./lib/data";
 import { isSupabaseConfigured, supabase } from "./lib/supabase";
@@ -180,6 +181,21 @@ function App() {
                   };
                 })
               : current,
+          );
+        }
+      }),
+    executeOnChain: (planId) =>
+      runAction("chain", async () => {
+        if (workspace?.mode !== "connected") throw new Error("On-chain execution requires a connected session");
+        const result = await runChainExecutor(planId);
+        await refresh();
+        if (result.state === "confirmed") {
+          setActionError(null);
+        } else {
+          // Not an error: an uncertain or unconfigured outcome is a real state
+          // that must be surfaced rather than silently retried.
+          setActionError(
+            `Chain execution state: ${result.state}${result.txHash ? ` · tx ${result.txHash.slice(0, 12)}…` : ""}${result.detail ? ` · ${result.detail}` : ""}`,
           );
         }
       }),

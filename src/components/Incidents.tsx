@@ -9,6 +9,7 @@ export interface RemediationActions {
   requestApproval: (planId: string) => void;
   decideApproval: (planId: string, approve: boolean) => void;
   executePlan: (planId: string) => void;
+  executeOnChain: (planId: string) => void;
 }
 
 interface IncidentsProps {
@@ -161,9 +162,14 @@ export function Incidents({
                 <span className="muted-copy">Awaiting decision from an owner or issuer administrator.</span>
               )}
               {plan.status === "approved" && (
-                <button className="primary-button" type="button" disabled={busy !== null} onClick={() => actions.executePlan(plan.id)}>
-                  <Check size={15} /> {busy === "execute" ? "Executing…" : "Execute migration"}
-                </button>
+                <>
+                  <button className="primary-button" type="button" disabled={busy !== null} onClick={() => actions.executeOnChain(plan.id)}>
+                    <Check size={15} /> {busy === "chain" ? "Submitting on chain…" : "Execute on chain"}
+                  </button>
+                  <button className="secondary-button" type="button" disabled={busy !== null} onClick={() => actions.executePlan(plan.id)}>
+                    {busy === "execute" ? "Recording…" : "Record simulated execution"}
+                  </button>
+                </>
               )}
               {(plan.status === "executing" || plan.status === "uncertain") && (
                 <span className="muted-copy">
@@ -182,7 +188,9 @@ export function Incidents({
 
             {isDemo && (
               <div className="demo-callout">
-                DEMO DATA — migration is simulated; no wallet, chain, or provider call is executed.
+                DEMO SCENARIO — positions and the incident are seeded. "Execute on chain" submits a real
+                transaction to the configured chain and issues a receipt bound to its hash; "Record simulated
+                execution" does not.
               </div>
             )}
           </>

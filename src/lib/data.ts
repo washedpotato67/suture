@@ -516,3 +516,44 @@ export async function runServerPreflight(input: {
     requiredRemediationPaths: (raw.requiredRemediationPaths as PreflightResult["requiredRemediationPaths"] | undefined) ?? [],
   };
 }
+
+export interface ChainExecutionResult {
+  state: string;
+  txHash?: string;
+  blockNumber?: number;
+  chainId?: number;
+  detail?: string;
+}
+
+/**
+ * Live on-chain remediation. Distinct from `rpcExecutePlan`, which records a
+ * simulated execution: this submits a real transaction and returns its hash.
+ * A non-2xx body still carries the executor's state, so an uncertain or
+ * unconfigured outcome is reported rather than collapsed into a transport error.
+ */
+export async function runChainExecutor(
+  planId: string,
+  operation?: "reconcile",
+): Promise<ChainExecutionResult> {
+  if (!supabase) throw new Error("Supabase is not configured");
+  const { data, error } = await supabase.functions.invoke("suture-executor", {
+    body: { planId, ...(operation ? { operation } : {}) },
+  });
+  const raw = error
+    ? await decisionFromErrorContext(error)
+    : data && typeof data === "object"
+      ? data as Record<string, unknown>
+      : null;
+  if (!raw) {
+    if (error) throw new Error(`Chain execution request failed: ${error.message}`);
+    throw new Error("Chain execution returned no result");
+  }
+  if (raw.error && !raw.state) throw new Error(String(raw.error));
+  return {
+    state: String(raw.state ?? "unknown"),
+    ...(raw.txHash ? { txHash: String(raw.txHash) } : {}),
+    ...(typeof raw.blockNumber === "number" ? { blockNumber: raw.blockNumber } : {}),
+    ...(typeof raw.chainId === "number" ? { chainId: raw.chainId } : {}),
+    ...(raw.detail ? { detail: String(raw.detail) } : {}),
+  };
+}
