@@ -140,8 +140,8 @@ export function Overview({
           </div>
           {isDemo && (
             <div className="demo-callout">
-              {checks.some((check) => check.evidenceState === "verified")
-                ? "DEMO SCENARIO — positions and the incident are seeded, but at least one check above carries provider-verified evidence."
+              {integrations.some((integration) => integration.state === "connected")
+                ? "DEMO SCENARIO — positions and the incident are seeded. These checks are derived from stored state; see Integrations and Preflight for provider-verified evidence."
                 : "DEMO DATA — no Cleanverse or Monad request produced these results."}
             </div>
           )}
