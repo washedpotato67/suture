@@ -22,3 +22,4 @@ supabase/.branches/
 .DS_Store
 .vscode/
 .idea/
+.vercel
