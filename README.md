@@ -19,11 +19,54 @@ SUTURE is a compliance-continuity and recovery layer for tokenized assets used i
 - Supabase schema with tenant RLS, no browser write privileges, immutable credential and policy history, append-only lineage, impact, remediation, approval, and audit records, plus cross-tenant reference guards.
 - Foundry contract slice for same-block policy activation, append-only asserted lineage, exact-amount vault receipts, collateral release after repayment, and user-funded authority-gated remediation.
 
+## Verified evidence
+
+Everything below is reproducible from this repository. Dates are 2026-08-09.
+
+| Claim | Evidence |
+| --- | --- |
+| Live console | https://suture-one.vercel.app (hosted Supabase, EU Frankfurt) |
+| Provider decision — PASS | `atoken` scope, request ID `2489d478-7553-4696-a3d5-74666858c6ab`, all Cleanverse checks `verified` |
+| Provider decision — BLOCK | `validator_pool` scope, `validator/verify` → `0000` `valid: false` on `verified` evidence |
+| API-key authorization | A-Token `0x215d8d76a16A0197CB576d984f68719BE7e69025` launched via the documented AES/CBC envelope, status `ISSUED` |
+| Provider webhooks | Two signed `ATOKEN_APPLY_RESULT` deliveries received and HMAC-verified — one `ISSUE_FAILED`, one `ISSUED` |
+| Contracts deployed | 8 contracts on Monad testnet (chain `10143`), all `exact_match` on Sourcify — `docs/MONAD.md` |
+| On-chain lineage | Deposit tx `0x914c3ad5…c1f89`, block 52228000, `PositionLineageRegistry` log in the receipt |
+| Live remediation | Executor tx `0xb0a63d82…4a83`, block 52238895, receipt `execution_mode: external` |
+| Full recovery cycle on chain | open → approve (separate key) → fund → release; 100e18 delivered, status `Executed` |
+| Assurance | 55 tests (31 app, 24 contract), 5 invariants × 128,000 calls, `slither` clean of High/Medium |
+
+Read next: `docs/CVI_CVA_INTEGRATION.md` for capability depth, `docs/LIMITATIONS.md`
+for everything not claimed, `docs/SECURITY_REVIEW.md` for findings,
+`docs/SCALABILITY.md` for the cost shape, `docs/DEMO_SCRIPT.md` to run it.
+
 ## What is not claimed
 
-On 2026-08-09 a read-only Cleanverse sandbox preflight ran end to end from the browser through the `suture-orchestrator` Edge Function against an authenticated session. `query_apass` returned `0000` with an active A-Pass (`status 1`, `cvRecordId 1916`) and `validator/verify` returned `0000` with `valid: false`, yielding a `BLOCK` decision on `VERIFIED` evidence with a stored provider request ID and SHA-256 response digest. This proves credential status evaluation and scoped validator-pool evaluation against the sandbox.
+**The contracts are not audited.** `docs/SECURITY_REVIEW.md` was written by the
+same session that wrote the code and argues against its own authority in its
+first paragraph. That includes `PolicyActivationScheduler`, written during this
+build, which holds policy authority on the deployment.
 
-It does not prove the A-Token scope path — the one unpaused sandbox A-Token returns `ComplianceFailed` for every tested wallet, including wallets holding active A-Passes. It does not prove API-key authorization, because the documented read endpoints transmit only `api-id`. It does not prove signed webhook delivery. The source asset evidence label was set manually for that run and is not provider-attested. No Monad RPC request, contract deployment, KYC result, or on-chain transaction has been independently verified. Simulated results use asserted or unavailable evidence and are labeled DEMO DATA from the stored `is_demo` flags on the incident and remediation plan. Remediation execution in v0.1 is simulated. It records the authorized migration and issues a receipt, but moves no assets.
+**There is no generic asset verification.** Cleanverse V5.6 exposes no such
+endpoint, so every decision record carries
+`CLEANVERSE_GENERIC_ASSET_VERIFICATION_UNAVAILABLE` rather than a fabricated
+result. There is likewise no credential-revocation or policy-change webhook;
+freshness depends on polling.
+
+**The deployment uses a mock asset and a mock eligibility oracle.** Behaviour
+against a real ERC-20 with transfer fees or non-standard returns is untested.
+Remediation moved 100e18 of a mock token, not a regulated instrument.
+
+**The sandbox API key was exposed in a session log and could not be rotated.**
+Every provider result is reproducible but is not independently trustworthy
+provenance.
+
+**Key roles are not fully separated.** The executor key is scoped and cannot
+approve its own remediation, but the deploy key remains issuer, approver and
+vault authority.
+
+**Chain reads are point-in-time, not indexed.** No synced cursor, no reorg
+handling, no backfill.
 
 ## Run locally
 
