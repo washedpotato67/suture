@@ -46,8 +46,12 @@ delete from public.audit_receipts;
 delete from public.approval_records;
 delete from public.audit_events where event_type like 'remediation%';
 
+-- Rotate the idempotency key. The executor derives the on-chain remediation id
+-- from it, and chain state cannot be reset, so reusing the key would collide
+-- with the remediation opened by the previous run (DuplicateRemediation).
 update public.remediation_plans
-   set status = 'draft', approved_at = null, approved_by = null, executed_at = null;
+   set status = 'draft', approved_at = null, approved_by = null, executed_at = null,
+       idempotency_key = 'demo:plan:incident-001:' || to_char(now(), 'YYYYMMDDHH24MISS');
 
 update public.incidents
    set status = 'open', resolved_at = null;
@@ -55,7 +59,7 @@ update public.incidents
 ${SCOPE_SQL}
 commit;
 
-select p.status as plan, i.status as incident,
+select p.status as plan, i.status as incident, p.idempotency_key,
        (select count(*) from public.audit_receipts) as receipts,
        (select scope_kind || ' · ' || chain from public.cleanverse_asset_scopes limit 1) as scope
   from public.remediation_plans p

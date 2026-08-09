@@ -53,6 +53,13 @@ const ESCROW_ABI = [
       ],
     }],
   },
+  { type: "error", name: "DuplicateRemediation", inputs: [] },
+  { type: "error", name: "Unauthorized", inputs: [] },
+  { type: "error", name: "InvalidStatus", inputs: [] },
+  { type: "error", name: "ZeroReference", inputs: [] },
+  { type: "error", name: "InvalidFunding", inputs: [] },
+  { type: "error", name: "TransferFailed", inputs: [] },
+  { type: "error", name: "FundingNotPrepared", inputs: [] },
 ] as const;
 
 type ChainConfig = {
@@ -155,7 +162,10 @@ Deno.serve(async (request) => {
   const account = privateKeyToAccount(config.key);
   const publicClient = createPublicClient({ chain, transport: http(config.rpcUrl) });
   const actionKey = `execute:onchain:${plan.idempotency_key}`;
-  const remediationId = await bytes32(`suture:remediation:${plan.id}`);
+  // Derived from the idempotency key rather than the plan id. The key identifies
+  // the attempt, so re-running a reset demo scenario opens a fresh remediation
+  // instead of colliding with one already on chain — chain state cannot be reset.
+  const remediationId = await bytes32(`suture:remediation:${plan.idempotency_key}`);
 
   // Reconciliation path: settle a submission whose outcome was never observed.
   if (body.operation === "reconcile") {
@@ -215,20 +225,24 @@ Deno.serve(async (request) => {
       functionName: "openRemediation",
       args: [
         remediationId,
-        await bytes32(`suture:position:${plan.incident_id}`),
+        await bytes32(`suture:position:${plan.idempotency_key}`),
         address(sourceWallet.address as string),
         address(replacementWallet.address as string),
         address(config.asset),
         1n,
-        await bytes32(`suture:policy:${plan.id}`),
+        await bytes32(`suture:policy:${plan.idempotency_key}`),
       ],
     });
   } catch (cause) {
     // Submission never left the executor: nothing to reconcile, plan untouched.
+    const message = cause instanceof Error ? cause.message : "Chain submission was rejected.";
+    const duplicate = message.includes("DuplicateRemediation") || message.includes("0xf5e4b902");
     return json({
       state: "not_submitted",
-      reasonCodes: ["CHAIN_SUBMISSION_REJECTED"],
-      detail: cause instanceof Error ? cause.message.slice(0, 300) : "Chain submission was rejected.",
+      reasonCodes: [duplicate ? "CHAIN_REMEDIATION_ALREADY_OPEN" : "CHAIN_SUBMISSION_REJECTED"],
+      detail: duplicate
+        ? "A remediation with this identifier is already open on chain. Chain state cannot be reset; rotate the plan idempotency key to open a new one."
+        : message.slice(0, 300),
     }, 502);
   }
 
